@@ -109,8 +109,11 @@ class Game
 			puts "Lancement de la partie"
 			i = a
 			j = 0 
-			if i == 2
-				player1 = Player.new("ia","I","y")
+			if i > 1
+				player1 = Player.new("ia","X","y")
+			end
+			if i == 3
+				player2 = Player.new("ia","O","O")
 			end
 				while i <= 2
 					puts "donne moi le nom du perso " + i.to_s
@@ -182,6 +185,7 @@ class GameMenu
 			case 
 				when a == "1" then Game.new()
 				when a == "2" then Game.new(2)
+				when a == "3" then Game.new(3)
 			else 
 				puts "ERROR"
 			end	
@@ -193,7 +197,7 @@ class GameMenu
 		puts "GAME Menu-----------------"
 		puts "| 1 - partie simple(pVp) |"
 		puts "| 2 - partie simple(pVia)|"
-		puts "| 3 - tournois           |"
+		puts "| 3 - patie simple(iaVia)|"
 		puts "-----------------GAME Menu"
 	end
 
