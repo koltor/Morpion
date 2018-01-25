@@ -12,12 +12,20 @@ class Player
 	#cette fonction est appeler lors de son tour de jeu
 	#on viens demender la ligne et la colonne que le joueur veux remplir
 	def tourDejeu()
-		puts "A moi de jouer (#{nom})"
-		print "ligne :"
-		x = gets.chomp()
-		print "colonne :"
-		y = gets.chomp()
-		return [x.to_i - 1,y.to_i - 1,@forme]
+		#partie Joueur
+		if @nom != "ia"
+			puts "A moi de jouer (#{nom})"
+			print "ligne :"
+			x = gets.chomp()
+			print "colonne :"
+			y = gets.chomp()
+			return [x.to_i - 1,y.to_i - 1,@forme, @nom]
+		else
+			sleep(0.5)
+			x = rand(1..3)
+			y = rand(1..3)
+			return [x.to_i - 1,y.to_i - 1,@forme, @nom]
+		end
 	end
 end
 
@@ -36,6 +44,9 @@ class Board
 
 	#la fonction d'affichage viens tout simplement afficher le plateau de jeu
 	def aff()
+				for q  in 1..20
+					puts
+				end
 			print @plateau[0][0],"|", @plateau[0][1],"|",@plateau[0][2]
 			puts
 			puts "-----"
@@ -52,7 +63,9 @@ class Board
 			@plateau[status[0]][status[1]] = status[2]
 			aff()
 		else
-			puts"case déja remplis veillez rejouer"
+			if status[3] != "ia"
+				puts"case déja remplis veillez rejouer"
+			end
 			return false
 		end
 	end
@@ -92,9 +105,13 @@ end
 #la classe principale du jeu
 class Game
 
-		def initialize()
-			i = 1
+		def initialize(a = 1)
+			puts "Lancement de la partie"
+			i = a
 			j = 0 
+			if i == 2
+				player1 = Player.new("ia","I","y")
+			end
 				while i <= 2
 					puts "donne moi le nom du perso " + i.to_s
 					nom = gets.chomp()
@@ -142,17 +159,47 @@ class Game
 				if board.verif == true
 					player[j%2].etat = "v"
 					puts "fin du game"
+					j -= 1
 				end
 				j += 1
 				t += 1
 			end
-			if t == 9
+			if (t == 9 && player[0].etat != "v" && player[1].etat != "v")
 				puts "match nul"
+			
 			else
 				puts "il y a un gagnant " + player[j%2].nom
 			end
 		end
 end
 
-#lancement d'une partie
-game = Game.new()
+class GameMenu
+
+	def initialize()
+		while true
+			affi()
+			a = gets.chomp
+			case 
+				when a == "1" then Game.new()
+				when a == "2" then Game.new(2)
+			else 
+				puts "ERROR"
+			end	
+		end
+	end
+
+	def affi()
+		#game menu
+		puts "GAME Menu-----------------"
+		puts "| 1 - partie simple(pVp) |"
+		puts "| 2 - partie simple(pVia)|"
+		puts "| 3 - tournois           |"
+		puts "-----------------GAME Menu"
+	end
+
+	def tournois()
+
+	end
+end
+
+game =  GameMenu.new()
